@@ -1,8 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useParams,useHistory } from "react-router-dom";
 import { Button } from "../components/Button";
 import { RoomCode } from "../components/RoomCode";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { database } from "../services/firebase";
 import { Question } from "../components/Question";
@@ -10,6 +10,7 @@ import { useRoom } from "../hooks/useRoom";
 
 import logoImg from "../assets/img/logo.svg";
 import "../styles/room.scss";
+import { setTimeout } from "timers";
 
 type roomParams = {
   id: string;
@@ -20,6 +21,7 @@ export function Room() {
   const { user, signInWithGoogle } = useAuth();
   const params = useParams<roomParams>();
   const roomId = params.id;
+  const history=useHistory()
 
   const { title, questions } = useRoom(roomId);
 
@@ -44,6 +46,19 @@ export function Room() {
     await database.ref(`rooms/${roomId}/questions`).push(question);
     setNewQuestion("");
   }
+
+
+  useEffect(() => {
+    async function getDados() {
+      const response = await database.ref(`rooms/${roomId}`).get()
+      if (!response.val().title) {
+        history.push(`/`);
+        setTimeout( async () => await database.ref(`rooms/${roomId}`).remove(),3000)
+        return
+      }
+    }
+    getDados();
+  }, [history, roomId, user]);
 
   async function handleLikeQuestion(
     questionId: string,

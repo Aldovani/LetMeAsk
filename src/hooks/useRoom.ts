@@ -36,39 +36,47 @@ type FirebaseQuestions = Record<
 
 export function useRoom(roomId: string) {
   const { user } = useAuth();
+
   useEffect(() => {
     const roomRef = database.ref(`rooms/${roomId}`);
 
-    roomRef.on("value", (room) => {
-      const databaseRoom = room.val();
-      const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {};
-      const parsedQuestions = Object.entries(firebaseQuestions).map(
-        ([key, value]) => {
-          return {
-            id: key,
-            content: value.content,
-            author: value.author,
-            isHighlighted: value.isHighlighted,
-            isAnswered: value.isAnswered,
-            likeCount: Object.values(value.likes ?? {}).length,
-            likeId: Object.entries(value.likes ?? {}).find(
-              ([key, likes]) => likes.authorId === user?.id
-            )?.[0],
+    try {
+      
+      roomRef.on("value", (room) => {
+        const databaseRoom = room.val();
+        const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {};
+        const parsedQuestions = Object.entries(firebaseQuestions).map(
+          ([key, value]) => {
+            return {
+              id: key,
+              content: value.content,
+              author: value.author,
+              isHighlighted: value.isHighlighted,
+              isAnswered: value.isAnswered,
+              likeCount: Object.values(value.likes ?? {}).length,
+              likeId: Object.entries(value.likes ?? {}).find(
+                ([key, likes]) => likes.authorId === user?.id
+                )?.[0],
+              };
+            }
+            );
+            setTitle(databaseRoom.title);
+            setQuestions(parsedQuestions);
+          });
+          
+          return () => {
+            roomRef.off("value");
           };
+    } catch (e) {
+      console.log(e)
         }
-      );
+        }, [roomId, user?.id]);
 
-      setTitle(databaseRoom.title);
-      setQuestions(parsedQuestions);
-    });
 
-    return () => {
-      roomRef.off("value");
-    };
-  }, [roomId, user?.id]);
+
 
   const [title, setTitle] = useState("");
   const [questions, setQuestions] = useState<Questions[]>([]);
 
-  return { title, questions };
+  return {title, questions };
 }

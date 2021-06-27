@@ -11,6 +11,8 @@ import checkImg from "../assets/img/check.svg";
 import answerImg from "../assets/img/answer.svg";
 import "../styles/room.scss";
 import { database } from "../services/firebase";
+import { useEffect } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 type roomParams = {
   id: string;
@@ -21,7 +23,19 @@ export function AdminRoom() {
   const params = useParams<roomParams>();
   const roomId = params.id;
 
+  const { user } = useAuth();
   const { title, questions } = useRoom(roomId);
+
+  useEffect(() => {
+    async function getDados() {
+      const response = await database.ref(`rooms/${roomId}`).get()
+    
+      if (user?.id !== response.val().authorId) {
+        history.push(`/rooms/${roomId}`);
+      }
+    }
+    getDados();
+  }, [history, roomId, user]);
 
   async function handleEndRoom() {
     await database.ref(`rooms/${roomId}`).update({
@@ -52,7 +66,7 @@ export function AdminRoom() {
     <div id="page-room">
       <header>
         <div className="content">
-          <img src={logoImg} alt="LetMeask" />
+          <img src={logoImg} alt="LetMeAsk" />
           <div>
             <RoomCode code={roomId} />
             <Button onClick={handleEndRoom} isOutlined>
