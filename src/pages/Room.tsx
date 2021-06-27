@@ -51,7 +51,7 @@ export function Room() {
   useEffect(() => {
     async function getDados() {
       const response = await database.ref(`rooms/${roomId}`).get()
-      if (!response.val().title) {
+      if (!response.exists()) {
         history.push(`/`);
         setTimeout( async () => await database.ref(`rooms/${roomId}`).remove(),3000)
         return

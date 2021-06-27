@@ -1,18 +1,25 @@
+import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import Modal from "react-modal";
+
+import { database } from "../services/firebase";
+
 import { Button } from "../components/Button";
 import { RoomCode } from "../components/RoomCode";
-
 import { Question } from "../components/Question";
+
 import { useRoom } from "../hooks/useRoom";
+import { useAuth } from "../hooks/useAuth";
 
 import logoImg from "../assets/img/logo.svg";
 import deleteImg from "../assets/img/delete.svg";
+import endRoom from "../assets/img/endRoom.svg";
 import checkImg from "../assets/img/check.svg";
+import questionsEmpty from "../assets/img/empty-questions.svg";
 import answerImg from "../assets/img/answer.svg";
+
 import "../styles/room.scss";
-import { database } from "../services/firebase";
-import { useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+import "../styles/modal.scss";
 
 type roomParams = {
   id: string;
@@ -25,13 +32,23 @@ export function AdminRoom() {
 
   const { user } = useAuth();
   const { title, questions } = useRoom(roomId);
+  const [questionId, setQuestionId] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function getDados() {
-      const response = await database.ref(`rooms/${roomId}`).get()
-    
+      const response = await database.ref(`rooms/${roomId}`).get();
+
+      if (!response.exists()) {
+        history.push(`/`);
+        return;
+      }
+
       if (user?.id !== response.val().authorId) {
         history.push(`/rooms/${roomId}`);
+        return;
+      } else if (user?.id === response.val().authorId) {
+        history.push(`/admin/rooms/${roomId}`);
       }
     }
     getDados();
@@ -46,9 +63,8 @@ export function AdminRoom() {
   }
 
   async function handleDeleteQuestion(questionId: string) {
-    if (window.confirm("Tem certeza que deseja excluir essa pergunta ? ")) {
-      await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
-    }
+    await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
+    setIsModalOpen(false);
   }
 
   async function handleCheckQuestionAnswered(questionId: string) {
@@ -69,7 +85,12 @@ export function AdminRoom() {
           <img src={logoImg} alt="LetMeAsk" />
           <div>
             <RoomCode code={roomId} />
-            <Button onClick={handleEndRoom} isOutlined>
+            <Button
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+              isOutlined
+            >
               Encerrar sala
             </Button>
           </div>
@@ -83,6 +104,14 @@ export function AdminRoom() {
         </div>
 
         <div className="question-list">
+
+          {questions.length === 0 &&
+            <div className='questionsEmpty'>
+            <img src={questionsEmpty} alt="" />
+            <h3>Nenhuma pergunta por aqui...</h3>
+            <p>Envie o código desta sala para seus amigos e comece a responder perguntas!</p>
+          </div>
+          }
           {questions.map((question) => (
             <Question
               key={question.id}
@@ -117,7 +146,8 @@ export function AdminRoom() {
               <button
                 type="button"
                 onClick={() => {
-                  handleDeleteQuestion(question.id);
+                  setIsModalOpen(true);
+                  setQuestionId(question.id);
                 }}
               >
                 <img src={deleteImg} alt="Remover pergunta" />
@@ -126,6 +156,64 @@ export function AdminRoom() {
           ))}
         </div>
       </main>
+      <Modal
+        onRequestClose={() => {
+          setIsModalOpen(false);
+          setQuestionId("");
+        }}
+        className="Modal"
+        isOpen={isModalOpen}
+        overlayClassName="Overlay"
+      >
+        {questionId === "" ? (
+          <div>
+            <img src={endRoom} alt="Fechar sala" />
+            <h3>Encerrar sala</h3>
+            <p>Tem certeza que você deseja encerrar esta sala?</p>
+            <div className="containerButton">
+              <button
+                className="button default"
+                onClick={() => {
+                  setIsModalOpen(false);
+                }}
+              >
+                Cancelar{" "}
+              </button>
+              <button className="button red" onClick={handleEndRoom}>
+                Sim, encerrar
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <img src={deleteImg} className="delete" alt="Delete Icon" />
+
+            <h3>Excluir pergunta</h3>
+              <p>Tem certeza que você deseja excluir esta pergunta?</p>
+              
+
+              <div className="containerButton">
+              <button
+              className="button default"
+              onClick={() => {
+                setIsModalOpen(false);
+                setQuestionId("");
+              }}
+                >Cancelar</button>
+                
+                <button
+              className="button red"
+              onClick={() => {
+                setIsModalOpen(false);
+                handleDeleteQuestion(questionId);
+                setQuestionId("");
+              }}
+              > Sim, excluir</button>
+              </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
+

@@ -111,6 +111,14 @@ border-radius: 50%;
 
     .question-list{
       margin-top: 32px;
+
+      .questionsEmpty{margin-top: 100px;
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 }

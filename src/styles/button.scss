@@ -13,6 +13,15 @@
 
     transition: filter 0.2s;
 
+    &.red{
+      background-color: #E73F5D;
+      color: #fff;
+    }
+
+  &.default{
+    background-color: #DBDCDD;
+    color: #737380;
+  }
 
     &.outlined{
       background: #fff;
