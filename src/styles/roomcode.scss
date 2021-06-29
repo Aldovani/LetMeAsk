@@ -26,4 +26,13 @@ height: 100%;
     font-size: 14px;
     font-weight: 500px; 
   }
+
+  &.dark{
+    // --bg: #FCFCFC;
+// --bg-panel: #EBEBEB;
+// --color-headings: #0077FF;
+// --color-text: #333333;
+
+background: #333333;
+  }
 }

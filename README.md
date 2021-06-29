@@ -54,9 +54,6 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 - [x] Modal
 - [ ] Responsividade
 - [ ] Dark mode
-- [ ] Refatoração
-
-
 
 
 ## 🔖 Layout

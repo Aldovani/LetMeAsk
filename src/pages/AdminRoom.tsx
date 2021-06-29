@@ -20,7 +20,8 @@ import answerImg from "../assets/img/answer.svg";
 
 import "../styles/room.scss";
 import "../styles/modal.scss";
-
+import { useTheme } from "../hooks/useTheme";
+import {Toggle} from '../components/Toggle'
 type roomParams = {
   id: string;
 };
@@ -34,9 +35,14 @@ export function AdminRoom() {
   const { title, questions } = useRoom(roomId);
   const [questionId, setQuestionId] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+const {theme} = useTheme()
   useEffect(() => {
     async function getDados() {
+      if (!user) {
+        return;
+      }
+   
       const response = await database.ref(`rooms/${roomId}`).get();
 
       if (!response.exists()) {
@@ -47,10 +53,10 @@ export function AdminRoom() {
       if (user?.id !== response.val().authorId) {
         history.push(`/rooms/${roomId}`);
         return;
-      } else if (user?.id === response.val().authorId) {
-        history.push(`/admin/rooms/${roomId}`);
       }
+        setLoading(false);
     }
+
     getDados();
   }, [history, roomId, user]);
 
@@ -78,8 +84,17 @@ export function AdminRoom() {
     });
   }
 
+  if (loading) {
+    return (
+      <div id="page-room">
+        <p>Carregando</p>
+      </div>
+    );
+  }
+
   return (
-    <div id="page-room">
+    <div id="page-room" className={theme}>
+      <Toggle/>
       <header>
         <div className="content">
           <img src={logoImg} alt="LetMeAsk" />
@@ -104,14 +119,16 @@ export function AdminRoom() {
         </div>
 
         <div className="question-list">
-
-          {questions.length === 0 &&
-            <div className='questionsEmpty'>
-            <img src={questionsEmpty} alt="" />
-            <h3>Nenhuma pergunta por aqui...</h3>
-            <p>Envie o código desta sala para seus amigos e comece a responder perguntas!</p>
-          </div>
-          }
+          {questions.length === 0 && (
+            <div className="questionsEmpty">
+              <img src={questionsEmpty} alt="" />
+              <h3>Nenhuma pergunta por aqui...</h3>
+              <p>
+                Envie o código desta sala para seus amigos e comece a responder
+                perguntas!
+              </p>
+            </div>
+          )}
           {questions.map((question) => (
             <Question
               key={question.id}
@@ -189,31 +206,34 @@ export function AdminRoom() {
             <img src={deleteImg} className="delete" alt="Delete Icon" />
 
             <h3>Excluir pergunta</h3>
-              <p>Tem certeza que você deseja excluir esta pergunta?</p>
-              
+            <p>Tem certeza que você deseja excluir esta pergunta?</p>
 
-              <div className="containerButton">
+            <div className="containerButton">
               <button
-              className="button default"
-              onClick={() => {
-                setIsModalOpen(false);
-                setQuestionId("");
-              }}
-                >Cancelar</button>
-                
-                <button
-              className="button red"
-              onClick={() => {
-                setIsModalOpen(false);
-                handleDeleteQuestion(questionId);
-                setQuestionId("");
-              }}
-              > Sim, excluir</button>
-              </div>
+                className="button default"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setQuestionId("");
+                }}
+              >
+                Cancelar
+              </button>
+
+              <button
+                className="button red"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  handleDeleteQuestion(questionId);
+                  setQuestionId("");
+                }}
+              >
+                {" "}
+                Sim, excluir
+              </button>
+            </div>
           </div>
         )}
       </Modal>
     </div>
   );
 }
-

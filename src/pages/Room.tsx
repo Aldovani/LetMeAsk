@@ -1,5 +1,6 @@
 import { useParams,useHistory } from "react-router-dom";
 import { Button } from "../components/Button";
+import { Toggle} from "../components/Toggle";
 import { RoomCode } from "../components/RoomCode";
 
 import { FormEvent, useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import { useRoom } from "../hooks/useRoom";
 import logoImg from "../assets/img/logo.svg";
 import "../styles/room.scss";
 import { setTimeout } from "timers";
+import { useTheme } from "../hooks/useTheme";
 
 type roomParams = {
   id: string;
@@ -24,7 +26,7 @@ export function Room() {
   const history=useHistory()
 
   const { title, questions } = useRoom(roomId);
-
+const {theme} = useTheme()
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
     if (newQuestion.trim() === "") return;
@@ -75,7 +77,8 @@ export function Room() {
     }
   }
   return (
-    <div id="page-room">
+    <div id="page-room" className={theme}>
+      <Toggle/>
       <header>
         <div className="content">
           <img src={logoImg} alt="LetMeask" />

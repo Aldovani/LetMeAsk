@@ -8,13 +8,16 @@ import illustration from "../assets/img/illustration.svg";
 import logoImg from "../assets/img/logo.svg";
 
 import { Button } from "../components/Button";
+import { Toggle } from "../components/Toggle";
 
 import "../styles/auth.scss";
+import { useTheme } from "../hooks/useTheme";
 
 export function NewRoom() {
   const { user } = useAuth();
   const [newRoom, setNewRoom] = useState("");
   const history = useHistory();
+  const {theme} = useTheme()
   async function handleCreateRoom(event: FormEvent) {
     event.preventDefault();
 
@@ -29,7 +32,8 @@ export function NewRoom() {
   }
 
   return (
-    <div id="page-auth">
+    <div id="page-auth" className={theme}>
+      <Toggle/>
       <aside>
         <img
           src={illustration}
