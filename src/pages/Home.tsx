@@ -97,7 +97,7 @@ export function Home() {
         onRequestClose={() => {
           setModalOpen(false);
         }}
-        className="Modal"
+        className="Modal" 
         overlayClassName="Overlay"
       >
         <div>

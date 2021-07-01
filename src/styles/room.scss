@@ -120,6 +120,32 @@
   }
 }
 
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  
+  .load {
+    border-radius: 50%;
+    border: 20px solid #835afd;
+    border-bottom-color: transparent;
+    width: 150px;
+    height: 150px;
+    animation: load 1s infinite  cubic-bezier(0.61, 0.57, 0.57, 0.55);
+  }
+}
+
+@keyframes load {
+  to {
+    transform: rotate(0deg) ;
+  }
+  from {
+    transform: rotate(360deg) ;
+  }
+}
+
 @media (max-width: 650px) {
   #page-room {
     header .content {
@@ -133,10 +159,10 @@
       form {
         margin: 0 auto;
         width: 90%;
-       .form-footer{
-         flex-direction: column;
-         gap: 16px;
-       }
+        .form-footer {
+          flex-direction: column;
+          gap: 16px;
+        }
       }
     }
   }

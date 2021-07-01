@@ -81,9 +81,9 @@ export function Room() {
 
   if (loading) {
     return (
-      <div>
-        <p>Caregando</p>
-      </div>
+      <div className="loading">
+      <div className="load"></div>
+    </div>
     );
   }
 

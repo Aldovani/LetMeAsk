@@ -89,8 +89,8 @@ const {theme} = useTheme()
 
   if (loading) {
     return (
-      <div id="page-room">
-        <p>Carregando</p>
+      <div className="loading">
+        <div className="load"></div>
       </div>
     );
   }
