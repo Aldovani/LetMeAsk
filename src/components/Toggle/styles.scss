@@ -1,50 +1,11 @@
-.theme {
- 
-  position: absolute;
-  top: 13px;
-  right: 10px;
-  height: 100px;
 
-
-
-input[type="checkbox"] {
-  width: 0;
-  height: 0;
-  visibility: hidden;
-  &:checked + label {
-    background: #0077ff;
+  input[type="checkbox"] {
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+  label {
+    cursor: pointer;
+    
   }
 
-  &:checked + label::after {
-    left: calc(100% - 3px);
-    transform: translateX(-100%);
-  }
-}
-label {
-  text-indent: -9999px;
-
-  display: block;
-  width: 65px;
-  height: 30px;
-  border-radius: 100px;
-  background: #111;
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    width: 30px;
-    height: 20px;
-    background: #fff;
-    top: 5px;
-    left: 3px;
-    border-radius: 90px;
-    transition: 0.3s;
-  }
-
-  &:active::after {
-    width: 57px;
-  }
-}
-
-}

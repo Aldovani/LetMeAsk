@@ -1,22 +1,27 @@
 import { useTheme } from "../../hooks/useTheme";
-import './styles.scss'
+import "./styles.scss";
+import sun from "../../assets/img/sun.svg";
+import moon from "../../assets/img/moon.svg";
 
 export function Toggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="theme">
-     
-      <input
+
+      <label htmlFor="themeInput">
+        <input
           id="themeInput"
           type="checkbox"
           checked={theme === "light" ? false : true}
           onChange={toggleTheme}
-      />
-       <label htmlFor="themeInput">
-        theme
-       
+        />
+
+        {theme === "dark" ? (
+          <img src={sun} alt="sol" />
+        ) : (
+          <img src={moon} alt="Lua" />
+        )}
       </label>
-    </div>
+   
   );
 }
