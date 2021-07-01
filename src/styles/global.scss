@@ -7,6 +7,84 @@
 body {
   background-color: #f8f8f8;
   color: #29292e;
+
+  &.dark {
+    background-color: #111111;
+
+    .logo {
+      filter: saturate(35.5);
+    }
+
+    #page-auth {
+      &.dark {
+        background: #111111;
+
+        aside {
+          background: #462173;
+        }
+      }
+    }
+
+    .button {
+      background: #462173;
+      color: #eeee;
+
+      &.red {
+        background: #e7245f;
+      }
+    }
+
+    #page-room {
+      color: #fff;
+
+header{
+  border-bottom-color:#323232 ;
+}
+
+      .room-title {
+        h1 {
+          color: #d1d1d6;
+        }
+      }
+
+      .user-info {
+        span {
+          color: #d6d6d6 !important;
+        }
+      }
+      .question {
+        background: #191919;
+
+        &.answered {
+          background-color: #29292e;
+        }
+        p {
+          color: #d1d1d6;
+        }
+
+        footer {
+          span {
+            color: #ffffff;
+          }
+        }
+
+        header {
+          border-bottom-color: #111;
+        }
+      }
+    }
+    .room-code {
+      & {
+        background-color: transparent;
+        color: #d1d1d6;
+
+        border-color: #462173;
+        div {
+          background-color: #462173;
+        }
+      }
+    }
+  }
 }
 
 body,
@@ -16,3 +94,7 @@ textarea {
   font: 400 16px "Roboto", sans-serif;
 }
 
+@media (max-width:650px) {
+  .logo{
+display: none;  }
+}

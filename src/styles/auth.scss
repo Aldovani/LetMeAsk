@@ -1,7 +1,6 @@
 #page-auth {
   display: flex;
   align-items: stretch;
-  height: 100vh;
 
   aside {
     flex: 7;
@@ -36,6 +35,38 @@
     align-items: center;
     justify-content: center;
   }
+
+  .topBar-info {
+    display: flex;
+
+    align-items: center;
+    gap: 20px;
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    div {
+      gap: 10px;
+      display: flex;
+      align-items: center;
+
+      span{
+        color: #737380;
+        text-align: center;
+      }
+      button {
+
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        > img {
+          width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+    }
+    }
+  }
+
   .main-content {
     display: flex;
     flex-direction: column;
@@ -48,11 +79,11 @@
       align-self: center;
     }
 
-    h2{
+    h2 {
       font-size: 24px;
-       margin:64px 0 24px;
-      font-family: "Poppins", sans-serif; 
-      }
+      margin: 64px 0 24px;
+      font-family: "Poppins", sans-serif;
+    }
     form {
       input {
         height: 50px;
@@ -71,12 +102,12 @@
         width: 100%;
       }
     }
-    p{
+    p {
       font-size: 14px;
       color: #737380;
       margin-top: 16px;
-      a{
-        color:#e559f9
+      a {
+        color: #e559f9;
       }
     }
   }
@@ -127,9 +158,23 @@
     }
   }
 
-
-&.dark{
-  background: #333333;
+  
 }
 
+@media (max-width: 960px) {
+  #page-auth {
+    flex-direction: column-reverse;
+    aside {
+      align-items: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    main {
+      margin: 120px 0 60px;
+    }
+  }
 }

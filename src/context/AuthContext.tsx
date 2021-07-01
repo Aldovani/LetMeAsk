@@ -4,6 +4,7 @@ import { auth, firebase } from "../services/firebase";
 type AuthContextType = {
   user: User | undefined;
   signInWithGoogle: () => Promise<void>;
+  SingOut: () => void;
 };
 
 type User = {
@@ -61,9 +62,16 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
       });
     }
   }
-
+  function SingOut() {
+    
+    firebase.auth().signOut().then(() => {
+    setUser(undefined)
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle }}>
+    <AuthContext.Provider value={{ user, signInWithGoogle,SingOut }}>
       {props.children}
     </AuthContext.Provider>
   );

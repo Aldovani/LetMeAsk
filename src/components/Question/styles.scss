@@ -28,6 +28,7 @@ background: #dbdcdd;
   }
   p {
     color: #29292e;
+    word-wrap: break-word;
   }
 
   footer {
@@ -88,5 +89,31 @@ background: #dbdcdd;
 
   .dark &{
     background: #EBEBEB;
+  }
+}
+@media (max-width: 850px) {
+  .question{
+    width: 90%;
+    margin: 10px auto;
+  
+  
+  
+  
+  
+  }
+}
+
+@media (max-width:450px) {
+  .question{
+
+    footer{
+      gap: 10px;
+      flex-direction: column;
+
+      .user-info{
+        flex-direction: column;
+      }
+
+    }
   }
 }

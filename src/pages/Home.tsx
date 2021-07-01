@@ -1,3 +1,4 @@
+import Modal from "react-modal";
 import { FormEvent, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -13,10 +14,12 @@ import { useTheme } from "../hooks/useTheme";
 import { Toggle } from "../components/Toggle";
 
 import "../styles/auth.scss";
+import "../styles/modal.scss";
 export function Home() {
   const history = useHistory();
-  const { user, signInWithGoogle } = useAuth();
+  const { user, signInWithGoogle, SingOut } = useAuth();
   const [roomCode, setRoomCode] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const { theme } = useTheme();
 
@@ -57,8 +60,22 @@ export function Home() {
       </aside>
       <main>
         <div className="main-content">
-      <Toggle />
-          <img src={logoImg} alt="LetMeAsk" />
+          <div className="topBar-info">
+            {user && (
+              <div>
+                <span>{user?.name}</span>
+                <button
+                  onClick={() => {
+                    setModalOpen(true);
+                  }}
+                >
+                  <img src={user?.avatar} alt={user?.name} />
+                </button>
+              </div>
+            )}
+            <Toggle />
+          </div>
+          <img src={logoImg} className="logo" alt="LetMeAsk" />
           <button onClick={handleCreateRoom} className="create-room">
             <img src={googleIcon} alt="Logo do Google" />
             Crie sua sala com o Google
@@ -75,6 +92,34 @@ export function Home() {
           </form>
         </div>
       </main>
+      <Modal
+        isOpen={modalOpen}
+        onRequestClose={() => {
+          setModalOpen(false);
+        }}
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <div>
+          <h1>{user?.name }</h1>
+          <img src={user?.avatar} alt={user?.name} />
+          <p>Deseja sair dessa conta ?</p>
+          <div className="containerButton">
+            <button className="button red" onClick={() => setModalOpen(false)}>
+              cancelar
+            </button>
+            <button
+              className="button"
+              onClick={() => {
+                SingOut();
+                setModalOpen(false);
+              }}
+            >
+              Sair
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

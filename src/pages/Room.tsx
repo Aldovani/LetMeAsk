@@ -1,6 +1,6 @@
-import { useParams,useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { Button } from "../components/Button";
-import { Toggle} from "../components/Toggle";
+import { Toggle } from "../components/Toggle";
 import { RoomCode } from "../components/RoomCode";
 
 import { FormEvent, useEffect, useState } from "react";
@@ -23,10 +23,10 @@ export function Room() {
   const { user, signInWithGoogle } = useAuth();
   const params = useParams<roomParams>();
   const roomId = params.id;
-  const history=useHistory()
+  const history = useHistory();
 
-  const { title, questions } = useRoom(roomId);
-const {theme} = useTheme()
+  const { title, questions, loading } = useRoom(roomId);
+  const { theme } = useTheme();
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
     if (newQuestion.trim() === "") return;
@@ -49,14 +49,16 @@ const {theme} = useTheme()
     setNewQuestion("");
   }
 
-
   useEffect(() => {
     async function getDados() {
-      const response = await database.ref(`rooms/${roomId}`).get()
+      const response = await database.ref(`rooms/${roomId}`).get();
       if (!response.exists()) {
         history.push(`/`);
-        setTimeout( async () => await database.ref(`rooms/${roomId}`).remove(),3000)
-        return
+        setTimeout(
+          async () => await database.ref(`rooms/${roomId}`).remove(),
+          3000
+        );
+        return;
       }
     }
     getDados();
@@ -76,13 +78,24 @@ const {theme} = useTheme()
       });
     }
   }
+
+  if (loading) {
+    return (
+      <div>
+        <p>Caregando</p>
+      </div>
+    );
+  }
+
   return (
     <div id="page-room" className={theme}>
-      <Toggle/>
       <header>
         <div className="content">
-          <img src={logoImg} alt="LetMeask" />
-          <RoomCode code={roomId} />
+          <img src={logoImg} className="logo" alt="LetMeask" />
+          <div>
+            <RoomCode code={roomId} />
+            <Toggle />
+          </div>
         </div>
       </header>
 
@@ -118,7 +131,12 @@ const {theme} = useTheme()
         </form>
 
         <div className="question-list">
-          {questions.map((question) => (
+
+          {
+           
+            questions.sort(function (a, b) {
+              return b.likeCount-a.likeCount
+            }).map((question) => (
             <Question
               key={question.id}
               content={question.content}

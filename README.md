@@ -52,9 +52,9 @@ Este é um projeto desenvolvido durante a **[Next Level Week Together](https://n
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
 - [x] Modal
-- [ ] Responsividade
-- [ ] Dark mode
-
+- [x] Dark mode
+- [x] Responsividade
+- [ ] Refatorar o código
 
 ## 🔖 Layout
 

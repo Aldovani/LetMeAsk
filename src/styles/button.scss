@@ -13,29 +13,48 @@
 
     transition: filter 0.2s;
 
+    
     &.red{
       background-color: #E73F5D;
       color: #fff;
     }
-
+    
   &.default{
     background-color: #DBDCDD;
     color: #737380;
   }
+  
+  &.outlined{
+    background: #fff;
+    border:1px solid #835af3 ;
+    color: #835af3;
+  }
+  img { 
+    margin-right: 8px;
+  }
+  &:not(:disabled):hover {
+    filter: brightness(0.9);
+  }
+  &:disabled{
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 
-    &.outlined{
-      background: #fff;
-      border:1px solid #835af3 ;
-      color: #835af3;
+
+  .dark &.outlined{
+
+
+    transition: all 1s;
+    background: transparent;
+    color: #E73F5D;
+    border-color: #E73F5D;
+    
+    
+    &:hover{
+      background-color: rgba(231, 63, 93,0.3);
     }
-    img { 
-      margin-right: 8px;
-    }
-    &:not(:disabled):hover {
-      filter: brightness(0.9);
-    }
-    &:disabled{
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    
+  }
+  
 }
+

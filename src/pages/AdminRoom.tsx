@@ -37,7 +37,9 @@ export function AdminRoom() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 const {theme} = useTheme()
+  
   useEffect(() => {
+
     async function getDados() {
       if (!user) {
         return;
@@ -47,6 +49,7 @@ const {theme} = useTheme()
 
       if (!response.exists()) {
         history.push(`/`);
+
         return;
       }
 
@@ -94,10 +97,9 @@ const {theme} = useTheme()
 
   return (
     <div id="page-room" className={theme}>
-      <Toggle/>
       <header>
         <div className="content">
-          <img src={logoImg} alt="LetMeAsk" />
+          <img src={logoImg} className="logo" alt="LetMeAsk" />
           <div>
             <RoomCode code={roomId} />
             <Button
@@ -105,9 +107,11 @@ const {theme} = useTheme()
                 setIsModalOpen(true);
               }}
               isOutlined
-            >
+              >
               Encerrar sala
             </Button>
+            
+              <Toggle/>
           </div>
         </div>
       </header>
@@ -129,7 +133,9 @@ const {theme} = useTheme()
               </p>
             </div>
           )}
-          {questions.map((question) => (
+          {questions.sort(function (a, b) {
+              return b.likeCount-a.likeCount
+            }).map((question) => (
             <Question
               key={question.id}
               content={question.content}
@@ -138,7 +144,8 @@ const {theme} = useTheme()
               isHighlighted={question.isHighlighted}
             >
               {!question.isAnswered && (
-                <>
+                  <>
+                    {question.likeCount}
                   <button
                     type="button"
                     onClick={() => {

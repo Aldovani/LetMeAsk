@@ -21,15 +21,24 @@ export function ThemeModeProvider( props: DarkModeContextProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
     let localStorageTheme = localStorage.getItem('theme')
 
+   
     return (localStorageTheme ?? 'light') as Theme
   })
 
   useEffect(() => {
-    localStorage.setItem('theme',theme)
+    localStorage.setItem('theme', theme)
+    if (theme === "dark") {
+      document.body.classList.add('dark')
+      
+    } else {
+      document.body.classList.remove('dark')
+      
+    }
   },[theme])
 
   function toggleTheme() {
-    setTheme(theme==="light"?"dark":"light")
+    setTheme(theme === "light" ? "dark" : "light")
+ 
 }
   return (
     <ThemeModeContext.Provider value={{theme,toggleTheme}}>
